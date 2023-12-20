@@ -1,0 +1,34 @@
+---
+name: "Shopping application image buil & deployement"
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{secrets.ACCESS_KEY}}
+      AWS_SECRET_ACCESS_KEY: ${{secrets.SECRET_KEY}}
+      AWS_DEFAULT_REGION: ${{secrets.REGION}}
+      packer_version: "1.9.4"
+
+    steps:
+      - name: "Checkout From Repository"
+        uses: actions/checkout@v3
+      - name: "Installing Packer"
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+          version: ${{env.packer_version}}
+      - name: "Packer Initialization"
+        run: packer init .
+        working-directory: ./packer/
+      - name: "Packer Validate"
+        run: packer validate .
+        working-directory: ./packer/
+      - name: "Packer Buil Image"
+        run: packer build .
+        working-directory: ./packer/
+
