@@ -1,4 +1,4 @@
-source "amazon-elb" "image" {
+source "amazon-ebs" "image" {
     ami_name = local.image-name
     source_ami = var.ami
     instance_type = "t2.micro"
@@ -12,7 +12,7 @@ source "amazon-elb" "image" {
 }
 
 build {
-    sources = [ "source.amazon-elb.image" ]
+    sources = [ "source.amazon-ebs.image" ]
      
     provisioner "file" {
       source = "../website"
